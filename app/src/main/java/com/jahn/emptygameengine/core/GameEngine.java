@@ -2,6 +2,7 @@ package com.jahn.emptygameengine.core;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -52,8 +53,8 @@ class GameEngine extends AppCompatActivity implements Runnable, TouchHandler, Se
   private float[]           accelerometer     = new float[3]; // to hold the g-forces in three dimensions, x, y, and z
   private SoundPool         soundpool         = new SoundPool.Builder().setMaxStreams(20).build();
 
-  public int width = 480;
-  public int heigth = 320;
+  public int width = 1920;
+  public int heigth = 1080;
 
   private int framesPerSecond = 0;
   long  currentTime;
@@ -86,9 +87,10 @@ class GameEngine extends AppCompatActivity implements Runnable, TouchHandler, Se
     surfaceHolder = surfaceView.getHolder();
 //        Log.d("GameEngine class", "We just finished the onCreate() method");
     screen = createStartScreen();
-    if (surfaceView.getWidth() > surfaceView.getHeight()) {
-      setOffScreenSurface(width, heigth);
-    } else setOffScreenSurface(heigth, width);
+    int display_mode = getResources().getConfiguration().orientation;
+    if (display_mode == Configuration.ORIENTATION_PORTRAIT) {
+      setOffScreenSurface(heigth, width);
+    } else setOffScreenSurface(width, heigth );
     touchHandler = new MultiTouchHandler(surfaceView, touchEventsBuffer, touchEventPool);
     SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
     if (sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).size() != 0) {
